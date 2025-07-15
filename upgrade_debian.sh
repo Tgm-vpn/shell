@@ -80,16 +80,7 @@ if [[ "$DEBIAN_VERSION" == "11" ]]; then
     apt autoremove -y || { log_error "Ошибка при apt autoremove после обновления."; exit 1; }
     apt clean || { log_error "Ошибка при apt clean после обновления."; exit 1; }
 
-    log_success "Обновление до Debian 12 завершено. РЕКОМЕНДУЕТСЯ ПЕРЕЗАГРУЗИТЬ СИСТЕМУ!"
-    log_info "Для перезагрузки используйте команду 'reboot' или запустите скрипт еще раз, он предложит перезагрузку."
-    # Предложение перезагрузки
-    read -p "Перезагрузить систему сейчас? (y/n): " REBOOT_CHOICE
-    if [[ "$REBOOT_CHOICE" == "y" || "$REBOOT_CHOICE" == "Y" ]]; then
-        log_info "Перезагружаем систему..."
-        reboot
-    else
-        log_info "Перезагрузка отложена. Пожалуйста, перезагрузите систему вручную как можно скорее."
-    fi
+    log_success "Обновление до Debian 12 завершено. Система НЕ БУДЕТ перезагружена автоматически. ПЕРЕЗАГРУЗИТЕ СИСТЕМУ ВРУЧНУЮ КАК МОЖНО СКОРЕЕ!"
 
 elif [[ "$DEBIAN_VERSION" == "12" ]]; then
     log_info "Обнаружена Debian 12. Выполняем стандартное обновление пакетов."
@@ -97,15 +88,7 @@ elif [[ "$DEBIAN_VERSION" == "12" ]]; then
     apt upgrade -y || { log_error "Ошибка при apt upgrade для Debian 12."; exit 1; }
     apt autoremove -y || { log_error "Ошибка при apt autoremove для Debian 12."; exit 1; }
     apt clean || { log_error "Ошибка при apt clean для Debian 12."; exit 1; }
-    log_success "Обновление пакетов Debian 12 завершено."
-    log_info "Перезагрузка обычно не требуется после обычного 'apt upgrade', но рекомендуется, если обновлялось ядро."
-    read -p "Перезагрузить систему сейчас (если обновлялось ядро)? (y/n): " REBOOT_CHOICE
-    if [[ "$REBOOT_CHOICE" == "y" || "$REBOOT_CHOICE" == "Y" ]]; then
-        log_info "Перезагружаем систему..."
-        reboot
-    else
-        log_info "Перезагрузка отложена."
-    fi
+    log_success "Обновление пакетов Debian 12 завершено. Система НЕ БУДЕТ перезагружена автоматически. Если обновлялось ядро, РЕКОМЕНДУЕТСЯ перезагрузка."
 
 else
     log_error "Неизвестная или неподдерживаемая версия Debian: $DEBIAN_VERSION. Скрипт предназначен для Debian 11 или 12."
