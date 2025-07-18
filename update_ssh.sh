@@ -10,14 +10,16 @@ GITHUB_USER_PASSWORD="$1"
 
 # Массив публичных SSH-ключей для root. Добавляйте новые ключи в кавычках через пробел.
 SSH_PUB_KEYS_ROOT=(
-    "ssh-rsa AAAAB3NzaC1yc2...ВАШ_КЛЮЧ_ROOT_1"
-    "ssh-rsa AAAAB3NzaC1yc2...ВАШ_КЛЮЧ_ROOT_2" # Пример второго ключа
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJVdoS7JOTQgmdnD9SS0Mn7MmmdqkR0jTgBDIuSqxrHy badnigga66@yahoo.com"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuhznZtRZq8UQStHuDWiGUgEqX8zTBsxUDlQ/bZkdhJ ps@DESKTOP-1VAP4EA" # Пример второго ключа
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDKMTJHO7HOKNsnwnyLRpaRNy3F9IpRVjx3XbPYEis7Tdj9r0slvERfhkV3q/bV09kIus/gHMH2tXGKOO2JzCDMpPUWR/em/eN8j/hpTwlPJLO6rH56goy1Ylev67Y/k6mEwgR1+yw5WipuVBdlqJjtVziUl8o9PSQYXSlxXK0pjTdAV+eNw2da4dwZXtjcB38YIje941ROOa4xS3A6uynuEEACC31UMHQ/H8PJFK+LwfSG+boND/TWBc4YqtXio9y3hKI14el9hKt+xhkkqVlRkaIt1g3wFElcMZsd3A8hkCCNvZaDIkhsHgGMt03aWKt2ycakuvCkCTa0BDxOfINLWajac4RmnJ/BX5r2qO9BPUhJ4YjdkYpn7Hlpbm4FcbdOSgMfpHVmuW05U+BvArtnNNRPCQtuO97uWMeLgkhjDoavyWAk6kdkq0rrDUk+M+eOK80c8w3gJkQ41L/KAbQe+oHjWLiKwvDnLj1yvDVsep615axlmpAAvy5FPDdB9sBZzP6CkyUbiebB7UxZVC0JUlkba7C1emzv/k2+2yjSwCFK+Ni1sOdrsklkv7/MHuF626QI6/FlmEPQlvbFSDdJhwTzD0mcdEAakeVkS1Q2maAMCFwzDqj50lyPP62pumtM/wClLii772Nl52mzQO/GFMQny7uXyBNqu4EWvO4a6w== server" # Пример второго ключа
 )
 
 # Массив публичных SSH-ключей для пользователя 'github'. Добавляйте новые ключи в кавычках через пробел.
 SSH_PUB_KEYS_GITHUB=(
-    "ssh-rsa AAAAB3NzaC1yc2...ВАШ_КЛЮЧ_GITHUB_1"
-    "ssh-rsa AAAAB3NzaC1yc2...ВАШ_КЛЮЧ_GITHUB_2" # Пример второго ключа
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJVdoS7JOTQgmdnD9SS0Mn7MmmdqkR0jTgBDIuSqxrHy badnigga66@yahoo.com"
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICuhznZtRZq8UQStHuDWiGUgEqX8zTBsxUDlQ/bZkdhJ ps@DESKTOP-1VAP4EA" # Пример второго ключа
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDKMTJHO7HOKNsnwnyLRpaRNy3F9IpRVjx3XbPYEis7Tdj9r0slvERfhkV3q/bV09kIus/gHMH2tXGKOO2JzCDMpPUWR/em/eN8j/hpTwlPJLO6rH56goy1Ylev67Y/k6mEwgR1+yw5WipuVBdlqJjtVziUl8o9PSQYXSlxXK0pjTdAV+eNw2da4dwZXtjcB38YIje941ROOa4xS3A6uynuEEACC31UMHQ/H8PJFK+LwfSG+boND/TWBc4YqtXio9y3hKI14el9hKt+xhkkqVlRkaIt1g3wFElcMZsd3A8hkCCNvZaDIkhsHgGMt03aWKt2ycakuvCkCTa0BDxOfINLWajac4RmnJ/BX5r2qO9BPUhJ4YjdkYpn7Hlpbm4FcbdOSgMfpHVmuW05U+BvArtnNNRPCQtuO97uWMeLgkhjDoavyWAk6kdkq0rrDUk+M+eOK80c8w3gJkQ41L/KAbQe+oHjWLiKwvDnLj1yvDVsep615axlmpAAvy5FPDdB9sBZzP6CkyUbiebB7UxZVC0JUlkba7C1emzv/k2+2yjSwCFK+Ni1sOdrsklkv7/MHuF626QI6/FlmEPQlvbFSDdJhwTzD0mcdEAakeVkS1Q2maAMCFwzDqj50lyPP62pumtM/wClLii772Nl52mzQO/GFMQny7uXyBNqu4EWvO4a6w== server" # Пример второго ключа
 )
 
 NEW_SSH_PORT=60000 # Новый порт SSH
