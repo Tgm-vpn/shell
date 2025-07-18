@@ -31,13 +31,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # --- 1. Установка WireGuard ---
-log_info "1/2: Устанавливаем пакет WireGuard..."
+log_info "1/3: Устанавливаем пакет WireGuard..." # Changed from 1/2 to 1/3 for clarity
 apt update -y || { log_error "Ошибка при apt update."; exit 1; }
 apt install -y wireguard qrencode || { log_error "Ошибка при установке WireGuard и qrencode."; exit 1; }
 log_success "WireGuard установлен. ✅"
 
 # --- 2. Генерация серверных ключей и настройка wg0.conf ---
-log_info "2/2: Генерируем ключи WireGuard и настраиваем wg0.conf..."
+log_info "2/3: Генерируем ключи WireGuard и настраиваем wg0.conf..." # Changed from 2/2 to 2/3
 
 WG_CONFIG_DIR="/etc/wireguard"
 WG_CONF_FILE="$WG_CONFIG_DIR/wg0.conf"
@@ -48,6 +48,20 @@ chmod 700 "$WG_CONFIG_DIR" || { log_error "Не удалось установи�
 # Генерируем ключи сервера
 SERVER_PRIV_KEY=$(wg genkey)
 SERVER_PUB_KEY=$(echo "$SERVER_PRIV_KEY" | wg pubkey)
+
+# --- Добавлена проверка ключей ---
+if [[ -z "$SERVER_PRIV_KEY" || ${#SERVER_PRIV_KEY} -ne 44 ]]; then
+    log_error "Ошибка: Приватный ключ WireGuard пуст или имеет неверную длину (ожидается 44 символа)."
+    log_error "Полученный ключ: '${SERVER_PRIV_KEY}' (длина: ${#SERVER_PRIV_KEY})"
+    exit 1
+fi
+
+if [[ -z "$SERVER_PUB_KEY" || ${#SERVER_PUB_KEY} -ne 44 ]]; then
+    log_error "Ошибка: Публичный ключ WireGuard пуст или имеет неверную длину (ожидается 44 символа)."
+    log_error "Полученный ключ: '${SERVER_PUB_KEY}' (длина: ${#SERVER_PUB_KEY})"
+    exit 1
+fi
+# --- Конец проверки ключей ---
 
 # Удаляем старый wg0.conf, если он есть
 rm -f "$WG_CONF_FILE"
@@ -74,7 +88,7 @@ sysctl -p /etc/sysctl.d/99-wireguard-forwarding.conf || { log_error "Ошибк�
 log_success "Перенаправление IPv4 включено. ✅"
 
 # --- 3. Запуск WireGuard ---
-log_info "Запускаем службу WireGuard..."
+log_info "3/3: Запускаем службу WireGuard..." # Changed from 3. to 3/3
 systemctl daemon-reload
 systemctl enable wg-quick@wg0 || { log_error "Не удалось включить wg-quick@wg0."; exit 1; }
 systemctl start wg-quick@wg0 || { log_error "Не удалось запустить wg-quick@wg0. Проверьте 'journalctl -u wg-quick@wg0'."; exit 1; }

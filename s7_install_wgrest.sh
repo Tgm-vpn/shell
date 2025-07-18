@@ -94,7 +94,7 @@ Description=WireGuard REST API (suquant/wgrest)
 After=network.target wg-quick@wg0.service
 
 [Service]
-ExecStart=${WG_REST_INSTALL_DIR}/wgrest -b ${WG_REST_LISTEN_ADDRESS} -p ${WG_REST_LISTEN_PORT} -f ${WG_CONFIG_DIR}/wg0.conf
+ExecStart=${WG_REST_INSTALL_DIR}/wgrest --listen ${WG_REST_LISTEN_ADDRESS}:${WG_REST_LISTEN_PORT} --conf ${WG_CONFIG_DIR}/wg0.conf
 Restart=always
 RestartSec=5s
 User=root
