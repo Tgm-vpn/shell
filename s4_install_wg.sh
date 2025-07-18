@@ -31,13 +31,13 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # --- 1. Установка WireGuard ---
-log_info "1/3: Устанавливаем пакет WireGuard..." # Changed from 1/2 to 1/3 for clarity
+log_info "1/3: Устанавливаем пакет WireGuard..."
 apt update -y || { log_error "Ошибка при apt update."; exit 1; }
 apt install -y wireguard qrencode || { log_error "Ошибка при установке WireGuard и qrencode."; exit 1; }
 log_success "WireGuard установлен. ✅"
 
 # --- 2. Генерация серверных ключей и настройка wg0.conf ---
-log_info "2/3: Генерируем ключи WireGuard и настраиваем wg0.conf..." # Changed from 2/2 to 2/3
+log_info "2/3: Генерируем ключи WireGuard и настраиваем wg0.conf..."
 
 WG_CONFIG_DIR="/etc/wireguard"
 WG_CONF_FILE="$WG_CONFIG_DIR/wg0.conf"
@@ -45,9 +45,9 @@ WG_CONF_FILE="$WG_CONFIG_DIR/wg0.conf"
 mkdir -p "$WG_CONFIG_DIR" || { log_error "Не удалось создать директорию $WG_CONFIG_DIR."; exit 1; }
 chmod 700 "$WG_CONFIG_DIR" || { log_error "Не удалось установить права для $WG_CONFIG_DIR."; exit 1; }
 
-# Генерируем ключи сервера
-SERVER_PRIV_KEY=$(wg genkey)
-SERVER_PUB_KEY=$(echo "$SERVER_PRIV_KEY" | wg pubkey)
+# Генерируем ключи сервера и обрезаем пробелы/новые строки
+SERVER_PRIV_KEY=$(wg genkey | tr -d '\n' | tr -d ' ')
+SERVER_PUB_KEY=$(echo "$SERVER_PRIV_KEY" | wg pubkey | tr -d '\n' | tr -d ' ')
 
 # --- Добавлена проверка ключей ---
 if [[ -z "$SERVER_PRIV_KEY" || ${#SERVER_PRIV_KEY} -ne 44 ]]; then
@@ -67,14 +67,13 @@ fi
 rm -f "$WG_CONF_FILE"
 
 # Создаем wg0.conf
-cat <<EOF > "$WG_CONF_FILE"
-[Interface]
-PrivateKey = $SERVER_PRIV_KEY
-Address = 10.244.0.1/24
-ListenPort = $WG_LISTEN_PORT
-SaveConfig = true # Позволяет wg-quick сохранять изменения пиров
+# Используем printf для точного контроля вывода и предотвращения нежелательных символов
+printf "[Interface]\n" > "$WG_CONF_FILE"
+printf "PrivateKey = %s\n" "$SERVER_PRIV_KEY" >> "$WG_CONF_FILE"
+printf "Address = 10.244.0.1/24\n" >> "$WG_CONF_FILE"
+printf "ListenPort = %d\n" "$WG_LISTEN_PORT" >> "$WG_CONF_FILE"
+printf "SaveConfig = true # Позволяет wg-quick сохранять изменения пиров\n\n" >> "$WG_CONF_FILE"
 
-EOF
 
 chmod 600 "$WG_CONF_FILE" || { log_error "Не удалось установить права для $WG_CONF_FILE."; exit 1; }
 log_success "Серверные ключи сгенерированы и $WG_CONF_FILE создан. ✅"
@@ -88,7 +87,7 @@ sysctl -p /etc/sysctl.d/99-wireguard-forwarding.conf || { log_error "Ошибк�
 log_success "Перенаправление IPv4 включено. ✅"
 
 # --- 3. Запуск WireGuard ---
-log_info "3/3: Запускаем службу WireGuard..." # Changed from 3. to 3/3
+log_info "3/3: Запускаем службу WireGuard..."
 systemctl daemon-reload
 systemctl enable wg-quick@wg0 || { log_error "Не удалось включить wg-quick@wg0."; exit 1; }
 systemctl start wg-quick@wg0 || { log_error "Не удалось запустить wg-quick@wg0. Проверьте 'journalctl -u wg-quick@wg0'."; exit 1; }
