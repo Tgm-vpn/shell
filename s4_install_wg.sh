@@ -68,11 +68,13 @@ rm -f "$WG_CONF_FILE"
 
 # Создаем wg0.conf
 # Используем printf для точного контроля вывода и предотвращения нежелательных символов
+# Убедимся, что нет лишних пробелов в конце строк и каждая строка имеет точный перевод строки \n
 printf "[Interface]\n" > "$WG_CONF_FILE"
 printf "PrivateKey = %s\n" "$SERVER_PRIV_KEY" >> "$WG_CONF_FILE"
 printf "Address = 10.244.0.1/24\n" >> "$WG_CONF_FILE"
 printf "ListenPort = %d\n" "$WG_LISTEN_PORT" >> "$WG_CONF_FILE"
-printf "SaveConfig = true # Позволяет wg-quick сохранять изменения пиров\n\n" >> "$WG_CONF_FILE"
+printf "SaveConfig = true # Позволяет wg-quick сохранять изменения пиров\n" >> "$WG_CONF_FILE" # Removed trailing \n for cleaner EOF
+printf "\n" >> "$WG_CONF_FILE" # Add an explicit empty line at the end, which is common in TOML for good measure
 
 
 chmod 600 "$WG_CONF_FILE" || { log_error "Не удалось установить права для $WG_CONF_FILE."; exit 1; }
