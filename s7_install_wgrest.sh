@@ -12,7 +12,7 @@ WG_REST_LISTEN_ADDRESS="127.0.0.1" # Адрес, на котором будет 
 WG_REST_LISTEN_PORT=10001           # Порт для wgrest API
 WG_REST_INSTALL_DIR="/opt/wgrest"   # Директория установки wgrest
 WG_REST_SERVICE_FILE="/etc/systemd/system/wgrest.service"
-WG_CONFIG_DIR="/etc/wireguard"      # Директория конфигурации WireGuard
+# WG_CONFIG_DIR="/etc/wireguard"    # Эта переменная теперь не используется напрямую для wgrest команды
 
 # --- Функции для логирования ---
 log_info() {
@@ -36,8 +36,11 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # --- 1. Проверка наличия WireGuard конфигурации ---
-if [ ! -f "$WG_CONFIG_DIR/wg0.conf" ]; then
-    log_error "Не найден файл конфигурации WireGuard wg0.conf ($WG_CONFIG_DIR/wg0.conf)."
+# Эта проверка по-прежнему важна, чтобы убедиться, что WireGuard настроен,
+# даже если wgrest не использует wg0.conf напрямую в своей команде запуска.
+# Она гарантирует, что интерфейс wg0 существует.
+if [ ! -f "/etc/wireguard/wg0.conf" ]; then
+    log_error "Не найден файл конфигурации WireGuard wg0.conf (/etc/wireguard/wg0.conf)."
     log_error "Пожалуйста, сначала установите WireGuard и настройте wg0.conf, используя install_wireguard.sh."
     exit 1
 fi
@@ -94,7 +97,7 @@ Description=WireGuard REST API (suquant/wgrest)
 After=network.target wg-quick@wg0.service
 
 [Service]
-ExecStart=${WG_REST_INSTALL_DIR}/wgrest --listen ${WG_REST_LISTEN_ADDRESS}:${WG_REST_LISTEN_PORT} --conf ${WG_CONFIG_DIR}/wg0.conf
+ExecStart=${WG_REST_INSTALL_DIR}/wgrest --listen ${WG_REST_LISTEN_ADDRESS}:${WG_REST_LISTEN_PORT}
 Restart=always
 RestartSec=5s
 User=root
