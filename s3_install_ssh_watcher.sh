@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/bash
 
 # Скрипт для установки ssh_watcher.sh и настройки Systemd сервиса.
 # Должен быть запущен от имени root.
