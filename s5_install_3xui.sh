@@ -10,7 +10,7 @@ THREEXUI_ROOT_PASSWORD="$1"
 
 # Порт и адрес для 3x-ui
 THREEXUI_LISTEN_ADDRESS="127.0.0.1"
-THREEXUI_LISTEN_PORT="10000"
+THREEXUI_LISTEN_PORT="$2"
 THREEXUI_USERNAME="root" # Имя пользователя по умолчанию
 
 # --- Функции для логирования ---
@@ -28,7 +28,13 @@ log_success() {
 
 # --- Проверка аргументов ---
 if [ -z "$THREEXUI_ROOT_PASSWORD" ]; then
-    log_error "Использование: $0 <ПАРОЛЬ_ДЛЯ_3XUI_ROOT>"
+    log_error "Использование: $0 <ПАРОЛЬ_ДЛЯ_3XUI_ROOT> <3XUI_PORT>"
+    log_error "Пример: sudo ./install_3xui.sh My3XUIPassword123!"
+    exit 1
+fi
+
+if [ -z "$THREEXUI_LISTEN_PORT" ]; then
+    log_error "Использование: $0 <ПАРОЛЬ_ДЛЯ_3XUI_ROOT> <3XUI_PORT>"
     log_error "Пример: sudo ./install_3xui.sh My3XUIPassword123!"
     exit 1
 fi
