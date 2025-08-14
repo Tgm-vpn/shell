@@ -35,7 +35,7 @@ touch "$CACHE_FILE" || { log_message "ERROR: Cannot create cache file $CACHE_FIL
 log_message "Starting SSH Watcher..."
 
 # Мониторим /var/log/auth.log в реальном времени
-tail -Fn0 /var/log/auth.log | \
+journalctl -f -u ssh.service | \
 while read line; do
     # Проверяем строки, указывающие на успешное SSH-подключение
     if echo "$line" | grep -q "sshd.*Accepted"; then
